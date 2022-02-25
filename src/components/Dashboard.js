@@ -48,16 +48,13 @@ function Dashboard() {
   const { userData } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!userData) {
+    if (userData === null) {
       dispatch({ type: "LOGOUT" });
-    } else {
+      navigate("/");
+    } else if (userData) {
       dispatch(fetchValidDateRange());
     }
   }, []);
-
-  useEffect(() => {
-    navigate(redirectTo);
-  }, [redirectTo]);
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
