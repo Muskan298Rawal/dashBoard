@@ -32,7 +32,7 @@ export const fetchValidDateRange = () => {
       .catch((error) => {
         if (error?.response?.status == 401) {
           dispatch({ type: LOGOUT });
-          dispatch({ type: "REDIRECT" , payload: "/"})
+          dispatch({ type: "REDIRECT", payload: "/" });
           displayError("Something Went Wrong! Login Again", "danger");
         } else {
           console.log("error", error);
@@ -43,14 +43,18 @@ export const fetchValidDateRange = () => {
 
 export const fetchDashboardData = (startDate, endDate) => {
   return (dispatch) => {
+    let dateRange = {
+      startDate,
+      endDate,
+    };
     dispatch({ type: SET_LOADING_DATA });
     let tablePayload = {
       ...payloadTable,
       chartObject: {
         ...payloadTable.chartObject,
-        dateRange: {
-          startDate,
-          endDate,
+        requestParam: {
+          ...payloadTable.chartObject.requestParam,
+          dateRange,
         },
       },
     };
@@ -58,9 +62,9 @@ export const fetchDashboardData = (startDate, endDate) => {
       ...payloadBar,
       chartObject: {
         ...payloadBar.chartObject,
-        dateRange: {
-          startDate,
-          endDate,
+        requestParam: {
+          ...payloadBar.chartObject.requestParam,
+          dateRange,
         },
       },
     };
@@ -68,9 +72,9 @@ export const fetchDashboardData = (startDate, endDate) => {
       ...payloadPie,
       chartObject: {
         ...payloadPie.chartObject,
-        dateRange: {
-          startDate,
-          endDate,
+        requestParam: {
+          ...payloadPie.chartObject.requestParam,
+          dateRange,
         },
       },
     };
@@ -79,7 +83,6 @@ export const fetchDashboardData = (startDate, endDate) => {
     let pie = CustomAxios.post("/getData", piePayload);
     Promise.all([table, bar, pie])
       .then((response) => {
-        console.log("final Data", response);
         dispatch({ type: SET_DASHBOARD_DATA, payload: response });
       })
       .catch((error) => {

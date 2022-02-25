@@ -10,29 +10,26 @@ import { setDateRange } from '../Redux/Actions/DashBoardAction';
 export default function BasicDateRangePicker() {
   const [value, setValue] = React.useState([null, null]);
 
-  const { dateRange, minDate, maxDate } = useSelector((state) => state.dashboard);
+  const { minDate, maxDate } = useSelector((state) => state.dashboard);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if(minDate){
-      setValue([new Date(parseInt(minDate)), new Date(parseInt(maxDate))])
+    if (minDate) {
+      setValue([new Date(parseInt(minDate)), new Date(parseInt(maxDate))]);
     }
-  }, [ minDate])
-
-  // React.useEffect(() => {
-  //     if(dateRange[0] != null || dateRange.length !== 0 )
-  //     {
-  //       setValue([parseInt(dateRange[0]), parseInt(dateRange[1])])
-  //     }
-  // }, [])
-
-
+  }, [minDate]);
 
   const handleChange = (newValue) => {
-    setValue(newValue)
-    dispatch(setDateRange(newValue))
-  }
+    console.log('range', newValue);
+    if (newValue[0] === null && newValue[1] === null) {
+      setValue([new Date(parseInt(minDate)), new Date(parseInt(maxDate))]);
+      dispatch(setDateRange([new Date(parseInt(minDate)), new Date(parseInt(maxDate))]));
+    } else {
+      setValue(newValue);
+      dispatch(setDateRange(newValue));
+    }
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
