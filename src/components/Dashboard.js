@@ -48,10 +48,8 @@ function Dashboard() {
   const { userData } = useSelector((state) => state.user);
 
   useEffect(() => {
-    debugger;
     if (!userData) {
       dispatch({ type: "LOGOUT" });
-      // navigate("/");
     } else {
       dispatch(fetchValidDateRange());
     }
